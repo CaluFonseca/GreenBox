@@ -6,9 +6,11 @@ Projeto PBL do 5.º semestre (2026/2027) da Licenciatura em Engenharia Informát
 
 ## Equipa
 
-- Fernando Simões
-- Cláudio Fonseca
-- Vítor Hugo Freitas
+| Nome | Número |
+|---|---|
+| Fernando Simões | 20241477 |
+| Cláudio Fonseca | 20240628 |
+| Vítor Hugo Freitas | 20241067 |
 
 ## Documentação
 
