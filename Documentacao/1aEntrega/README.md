@@ -171,8 +171,8 @@ A lista consolida o documento do grupo e a apresentação. Quantidades, preços 
 |---|---|---|
 | Firmware ESP32 | MicroPython (provisório) | Leitura de sensores, regras locais, atuadores e comunicação entre nós. |
 | Comunicação entre nós | ESP-NOW | Troca de leituras/comandos entre periféricos e nó central. |
-| Ligação à rede | Wi-Fi (rede local) + HTTP/HTTPS | Enviar dados e imagens ao servidor local e permitir consulta do painel. |
-| Servidor | Servidor local (mini-PC) | Alojar a aplicação web, a API, a base de dados, o dashboard, a IA e as imagens. |
+| Ligação à rede | Wi-Fi + HTTPS | Enviar dados e imagens ao servidor local e permitir consulta do painel. |
+| Servidor | Servidor local | Alojar a aplicação web, a API, a base de dados, o dashboard, a IA e as imagens. |
 | API | Python + FastAPI | Endpoints REST, validação e resposta a pedidos. |
 | Base de dados | MySQL | Persistir leituras, estados, alertas, energia e resultados da IA. |
 | Armazenamento de imagens | Sistema de ficheiros do servidor local | Guardar as fotografias enviadas pelos nós com câmara. |
@@ -194,7 +194,7 @@ As tecnologias são provisórias e serão confirmadas durante a prototipagem. ES
 
 ## 6. Arquitetura computacional distribuída
 
-A arquitetura separa aquisição física, controlo local, persistência e análise. O ESP32-S3 funciona como nó central; os ESP32-S3-WROOM-CAM são distribuídos pelas zonas de cultivo. A comunicação periférico-central será feita por ESP-NOW. O central aplica regras locais e, quando existe ligação, envia dados à API REST por Wi-Fi (rede local). A aplicação web, a API, a base de dados, o dashboard, a IA e o armazenamento de imagens correm num servidor local, o que dá maior estabilidade ao sistema; os ESP32 ficam responsáveis pela automação, pelos sensores e pelos atuadores.
+A arquitetura separa aquisição física, controlo local, persistência e análise. O ESP32-S3 funciona como nó central; os ESP32-S3-WROOM-CAM são distribuídos pelas zonas de cultivo. A comunicação periférico-central será feita por ESP-NOW. O central aplica regras locais e, quando existe ligação, envia dados à API REST por Wi-Fi. A aplicação web, a API, a base de dados, o dashboard, a IA e o armazenamento de imagens correm num servidor local, o que dá maior estabilidade ao sistema; os ESP32 ficam responsáveis pela automação, pelos sensores e pelos atuadores.
 
 | Componente | Função |
 |---|---|
