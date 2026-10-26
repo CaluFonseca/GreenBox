@@ -157,7 +157,7 @@ A lista consolida o documento do grupo e a apresentação. Quantidades, preços 
 | Aquecedor ventilado 12 V / 100 W | 1 | Controlo automático da temperatura e da ventilação. |
 | Fita LED de cultivo | 1 m ou por prateleira | Iluminação suplementar; potência a validar. |
 | RTC DS3231 | 1 | Manter horários sem depender da Internet. |
-| INA219 | 2, indicativo | Medição em circuitos compatíveis; verificar limites elétricos. |
+| INA219 | 3, indicativo | Medição de tensão, corrente e potência da iluminação, da ventilação e da bomba. |
 | Módulos MOSFET/relés e proteções | Conforme circuitos | Comutar atuadores com dimensionamento adequado. |
 | Fontes 12 V e 5 V + conversores | 1 conjunto | Alimentar atuadores e eletrónica. |
 | Estrutura, depósito, suportes e cablagem | 1 conjunto | Estrutura vertical e montagem. |
