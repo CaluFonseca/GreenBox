@@ -32,7 +32,7 @@ Sistema distribuído de monitorização, automação e otimização de recursos 
 
 A GreenBox AI propõe uma estufa vertical instalada num contentor, concebida para agricultura urbana em ambiente controlado. As plantas serão cultivadas em substrato e irrigadas por rega gota a gota. A instalação integra sensores, microcontroladores ESP32, atuadores, armazenamento de dados e Inteligência Artificial (IA).
 
-O sistema monitoriza a humidade do substrato, a temperatura e a humidade do ar, a luminosidade, o nível de água e o consumo elétrico. Com base nestes dados, automatiza a rega por zonas, controla a iluminação e a ventilação e o aquecimento. Os dados são enviados por uma API REST para uma base de dados MySQL e apresentados num painel web.
+O sistema monitoriza a humidade do substrato, a temperatura e a humidade do ar, a luminosidade, o nível de água e o consumo elétrico. Com base nestes dados, automatiza a rega por zonas, controla a iluminação e a ventilação e o aquecimento. Os dados são enviados por uma API REST para um servidor local, que os guarda numa base de dados MySQL e os apresenta num painel web.
 
 ### Problema identificado
 
@@ -59,7 +59,7 @@ O projeto integra as quatro unidades curriculares do 5.º semestre, cada uma res
 
 | Unidade curricular | Contributo para a GreenBox AI | Secções do relatório |
 |---|---|---|
-| Sistemas Distribuídos | Gestão do projeto (planeamento, milestones, GitHub). Arquitetura distribuída: nós periféricos ESP32-S3-WROOM-CAM ligados ao nó central ESP32-S3 por ESP-NOW; nó central ligado à API REST por Wi-Fi/HTTPS; serviços de base de dados, dashboard e IA. Tolerância a falhas com regras locais e buffer (a validar no protótipo). | 6, 9 |
+| Sistemas Distribuídos | Gestão do projeto (planeamento, milestones, GitHub). Arquitetura distribuída: nós periféricos ESP32-S3-WROOM-CAM ligados ao nó central ESP32-S3 por ESP-NOW; nó central e nós com câmara ligados por Wi-Fi (rede local) a um servidor local que aloja a aplicação web, a API REST, a base de dados, o dashboard, a IA e o armazenamento de imagens. Tolerância a falhas com regras locais e buffer (a validar no protótipo). | 6, 9 |
 | Computação Física e IoT | Programação dos ESP32. Integração de sensores (humidade do substrato, BME280, BH1750, nível ultrassónico, INA219) e atuadores (bomba, válvulas, ventoinhas, LED, nebulizador, aquecedor). Envio dos dados por REST para a base de dados MySQL. | 3, 4, 5 |
 | Inteligência Artificial | Tratamento dos dados dos sensores e da Open-Meteo (fonte externa). Previsão do consumo energético a 24 h e deteção de anomalias no ciclo de rega, acrescentando funcionalidades ao dispositivo. | 7 |
 | Engenharia de Software | Especificação dos requisitos funcionais e não funcionais, guiões de utilização e plano de testes e validação. | 2, 8 |
@@ -139,12 +139,13 @@ A lista consolida o documento do grupo e a apresentação. Quantidades, preços 
 
 ![Esboço do artefacto físico](imagens/esboco-artefacto-fisico.jpg)
 
-*Figura 1 – Esboço do artefacto físico: estufa vertical em contentor com três zonas de cultivo.*
+*Figura 1 – Esboço do artefacto físico: estufa vertical em contentor com três zonas de cultivo e servidor local.*
 
 | Componente | Qtd. preliminar | Finalidade |
 |---|---|---|
 | ESP32-S3 DevKit + expansão | 1 | Nó central: regras locais, coordenação, Wi-Fi, REST e controlo central. |
-| ESP32-S3-WROOM-CAM | Até 3 | Nós periféricos junto às zonas de cultivo; comunicação ESP-NOW. |
+| ESP32-S3-WROOM-CAM | Até 3 | Nós periféricos junto às zonas de cultivo; comunicação ESP-NOW e captura de imagens. |
+| Servidor local (mini-PC) | 1 | Alojar a aplicação web, a API REST, a base de dados, o dashboard, a IA e o armazenamento de imagens. |
 | Sensores capacitivos de humidade | 3 | Uma leitura por zona/prateleira, sujeita ao desenho final. |
 | Sensores BME280 | 2 | Temperatura/humidade do ar interior e exterior; exterior opcional no início. |
 | Sensor luminosidade BH1750 | 1 | Medição de luz ambiente. |
@@ -170,9 +171,11 @@ A lista consolida o documento do grupo e a apresentação. Quantidades, preços 
 |---|---|---|
 | Firmware ESP32 | MicroPython (provisório) | Leitura de sensores, regras locais, atuadores e comunicação entre nós. |
 | Comunicação entre nós | ESP-NOW | Troca de leituras/comandos entre periféricos e nó central. |
-| Ligação à rede | Wi-Fi + HTTPS | Enviar dados à API e permitir consulta do painel. |
+| Ligação à rede | Wi-Fi (rede local) + HTTP/HTTPS | Enviar dados e imagens ao servidor local e permitir consulta do painel. |
+| Servidor | Servidor local (mini-PC) | Alojar a aplicação web, a API, a base de dados, o dashboard, a IA e as imagens. |
 | API | Python + FastAPI | Endpoints REST, validação e resposta a pedidos. |
 | Base de dados | MySQL | Persistir leituras, estados, alertas, energia e resultados da IA. |
+| Armazenamento de imagens | Sistema de ficheiros do servidor local | Guardar as fotografias enviadas pelos nós com câmara. |
 | Dashboard | HTML, CSS, JavaScript, Chart.js | Estado atual, histórico, eventos, alertas e previsões. |
 | IA e análise | Python, pandas, scikit-learn | Preparação de dados, previsão energética e deteção de anomalias. |
 | Fonte meteorológica | Open-Meteo API | Temperatura exterior e radiação solar, conforme endpoint disponível. |
@@ -191,11 +194,12 @@ As tecnologias são provisórias e serão confirmadas durante a prototipagem. ES
 
 ## 6. Arquitetura computacional distribuída
 
-A arquitetura separa aquisição física, controlo local, persistência e análise. O ESP32-S3 funciona como nó central; os ESP32-S3-WROOM-CAM são distribuídos pelas zonas de cultivo. A comunicação periférico-central será feita por ESP-NOW. O central aplica regras locais e, quando existe ligação, envia dados à API REST por Wi-Fi/HTTPS.
+A arquitetura separa aquisição física, controlo local, persistência e análise. O ESP32-S3 funciona como nó central; os ESP32-S3-WROOM-CAM são distribuídos pelas zonas de cultivo. A comunicação periférico-central será feita por ESP-NOW. O central aplica regras locais e, quando existe ligação, envia dados à API REST por Wi-Fi (rede local). A aplicação web, a API, a base de dados, o dashboard, a IA e o armazenamento de imagens correm num servidor local, o que dá maior estabilidade ao sistema; os ESP32 ficam responsáveis pela automação, pelos sensores e pelos atuadores.
 
 | Componente | Função |
 |---|---|
-| Nós periféricos | Recolher humidade do substrato e comunicar com o central; acionar válvulas conforme o desenho final. |
+| Nós periféricos | Recolher humidade do substrato e comunicar com o central; acionar válvulas conforme o desenho final; captar imagens da zona e enviá-las ao servidor local. |
+| Servidor local | Alojar a aplicação web, a API REST, a base de dados MySQL, o dashboard, o serviço de IA e o armazenamento de imagens. |
 | Nó central ESP32-S3 | Coordenar os nós, aplicar regras de segurança e controlar bomba, iluminação, ventilação, humidificação. |
 | API REST / FastAPI | Receber, validar e disponibilizar leituras e eventos. |
 | Base de dados MySQL | Guardar leituras, estados, alertas, medições energéticas e resultados de IA. |
