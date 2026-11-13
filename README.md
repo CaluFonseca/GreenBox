@@ -15,6 +15,7 @@ Projeto PBL do 5.º semestre (2026/2027) da Licenciatura em Engenharia Informát
 ## Documentação
 
 - [1.ª Entrega: Proposta inicial (Milestone 1)](Documentacao/1aEntrega/README.md)
+- [Engenharia de Software: especificação de requisitos](Documentacao/EngenhariaSoftware/GreenBox_AI_Especificacao_Requisitos.pdf)
 
 ## Estrutura do repositório
 
