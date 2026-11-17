@@ -1,0 +1,12 @@
+# Datasets (descarregados localmente, não vão para o GitHub)
+ia/dados/*
+!ia/dados/.gitkeep
+
+# Configurações e bibliotecas de suporte do IDE (PyCharm / IntelliJ)
+.idea/
+*-pycharm-support-libs/
+
+# Python / Jupyter
+.venv/
+__pycache__/
+.ipynb_checkpoints/
