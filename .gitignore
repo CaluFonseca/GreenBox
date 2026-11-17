@@ -1,6 +1,8 @@
 # Datasets (descarregados localmente, não vão para o GitHub)
+# Exceção: o dataset público da UCI (CC BY 4.0), incluído com citação no ia/README.md
 ia/dados/*
 !ia/dados/.gitkeep
+!ia/dados/energydata_complete.csv
 
 # Configurações e bibliotecas de suporte do IDE (PyCharm / IntelliJ)
 .idea/
