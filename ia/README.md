@@ -20,6 +20,15 @@ Enquanto não existem dados da GreenBox, o notebook usa o dataset público **App
 
 Só a secção 1 do notebook depende do dataset. Para usar os dados da GreenBox, implementar `carregar_greenbox()` com as mesmas colunas padrão e trocar `dados = carregar_kaggle()` por `dados = carregar_greenbox()`.
 
+## Notebook de dados de estufa
+
+[`estufa_iot_agriculture.ipynb`](estufa_iot_agriculture.ipynb) usa o dataset de uma estufa real para as duas linhas de IA:
+
+- **Previsão do consumo (RF13):** consumo estimado a partir do tempo que a ventoinha, as bombas e o LED estiveram ligados, com potências típicas dos componentes da GreenBox, e meteorologia histórica da Open-Meteo como fonte externa.
+- **Deteção de anomalias na rega (RF15 e RF04):** verifica se a humidade sobe depois de regar e se a bomba funciona com o depósito vazio, com falhas reais e simuladas.
+
+Para correr, descarregar o ficheiro `IoTProcessed_Data.csv` de [IoT Agriculture 2024](https://www.kaggle.com/datasets/wisam1985/iot-agriculture-2024) (Kaggle) para a pasta `ia/dados/`. Este ficheiro não vai para o GitHub.
+
 ## Dataset: fonte e licença
 
 - **Fonte:** UCI Machine Learning Repository – [Appliances Energy Prediction](https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction). O mesmo ficheiro está também disponível no [Kaggle](https://www.kaggle.com/datasets/loveall/appliances-energy-prediction).
